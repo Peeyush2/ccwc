@@ -2,7 +2,7 @@
 
 This is from Coding Challenge https://codingchallenges.substack.com/p/coding-challenge-1
 
-Build using go:
+Built using go:
 
 `go build .\main.go`
 
