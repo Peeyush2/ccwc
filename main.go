@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"unicode/utf8"
@@ -21,37 +22,31 @@ func check(e error) {
 }
 
 func main() {
+	var dat = []byte{}
 
-	var dat []byte
+	allArgs := os.Args
 
-	lenArgs := len(os.Args)
+	execPath, err := os.Executable()
+	check(err)
+
+	var execFile = filepath.Join(filepath.Dir(execPath), "main.exe")
+
+	var otherArgs []string
+	fileRef := ""
 
 	allFlags := strings.Split(flags, " ")
 
-	isCorreectLink := true
-
-	for _, flag := range allFlags {
-		if strings.Contains(os.Args[lenArgs-1], flag) {
-			isCorreectLink = false
-			break
+	for _, val := range allArgs {
+		isFlag := false
+		for _, flag := range allFlags {
+			if strings.ToLower(val) == flag {
+				otherArgs = append(otherArgs, flag)
+				isFlag = true
+				continue
+			}
 		}
-	}
-
-	fmt.Println("Arguments:", os.Args)
-	fmt.Println(isCorreectLink)
-
-	var fileRef string = ""
-	var otherArgs []string
-
-	if isCorreectLink {
-		fileRef = os.Args[lenArgs-1]
-		if lenArgs >= 2 {
-			otherArgs = os.Args[1 : lenArgs-1]
-		}
-	} else {
-		fileRef = ""
-		if lenArgs >= 1 {
-			otherArgs = os.Args[1:lenArgs]
+		if !isFlag && val != execFile {
+			fileRef = val
 		}
 	}
 
@@ -64,7 +59,6 @@ func main() {
 		data, err := os.ReadFile(fileRef)
 		check(err)
 		dat = data
-
 	}
 
 	if len(otherArgs) == 0 {
