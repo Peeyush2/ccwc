@@ -9,3 +9,7 @@ Built using go:
 Run with main.exe file generated.
 
 `.\main.exe -c -l -w -m .\test.txt`
+
+Chat GPTs verdict on my code -
+
+https://chatgpt.com/share/688306e3-9e9c-800c-bf1c-00e964b899d2
